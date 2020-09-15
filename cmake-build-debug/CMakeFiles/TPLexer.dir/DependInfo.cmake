@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/flexer.cpp" "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/TPLexer.dir/flexer.cpp.o"
-  "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/hlexer.cpp" "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/TPLexer.dir/hlexer.cpp.o"
-  "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/language.cpp" "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/TPLexer.dir/language.cpp.o"
-  "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/main.cpp" "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/TPLexer.dir/main.cpp.o"
+  "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/flexer.cpp" "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/CMakeFiles/TPLexer.dir/flexer.cpp.o"
+  "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/hlexer.cpp" "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/CMakeFiles/TPLexer.dir/hlexer.cpp.o"
+  "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/language.cpp" "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/CMakeFiles/TPLexer.dir/language.cpp.o"
+  "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/main.cpp" "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/CMakeFiles/TPLexer.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

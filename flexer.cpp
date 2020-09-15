@@ -1,6 +1,6 @@
-#line 2 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
+#line 2 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
 
-#line 4 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
+#line 4 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -428,8 +428,8 @@ static const flex_int32_t yy_rule_can_match_eol[10] =
 #line 6 "flexer.l"
 #include "common.h"
 #include "language.h"
-#line 432 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
-#line 433 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
+#line 432 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
+#line 433 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
 
 #define INITIAL 0
 
@@ -564,7 +564,7 @@ YY_DECL
 #line 14 "flexer.l"
 
 
-#line 568 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
+#line 568 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -686,7 +686,7 @@ YY_RULE_SETUP
 #line 36 "flexer.l"
 ECHO;
 	YY_BREAK
-#line 690 "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/../flexer.cpp"
+#line 690 "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/../flexer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

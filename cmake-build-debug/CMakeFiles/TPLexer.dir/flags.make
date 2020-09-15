@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/."
+CXX_INCLUDES = -I/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/.
 
-CXX_FLAGS =  -Wall -Wno-conversion -Wno-unused-function -Wno-register -Wno-deprecated-register -g -std=gnu++1z
+CXX_FLAGS =  -Wall -Wno-conversion -Wno-unused-function -Wno-register -Wno-deprecated-register -g -std=gnu++17
 
