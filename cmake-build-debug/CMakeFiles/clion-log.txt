@@ -1,0 +1,4 @@
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug

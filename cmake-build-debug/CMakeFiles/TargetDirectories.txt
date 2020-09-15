@@ -1,0 +1,3 @@
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/TPLexer.dir
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/CMakeFiles/edit_cache.dir

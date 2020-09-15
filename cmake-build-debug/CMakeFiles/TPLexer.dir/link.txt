@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wno-conversion -Wno-unused-function -Wno-register -Wno-deprecated-register -g CMakeFiles/TPLexer.dir/main.cpp.o CMakeFiles/TPLexer.dir/language.cpp.o CMakeFiles/TPLexer.dir/hlexer.cpp.o CMakeFiles/TPLexer.dir/flexer.cpp.o -o TPLexer 
