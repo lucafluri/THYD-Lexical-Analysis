@@ -86,6 +86,7 @@ void HLexer::process_identifier( Token& token ) {
 // A sequence of numbers/digits e.g. 12345
 void HLexer::process_digits( Token& token )
 {
+
     // NOTE: Add your code here (instead of the provided c_next()).
     c_next();
 }
@@ -94,8 +95,16 @@ void HLexer::process_digits( Token& token )
 // Process integers and real numbers.
 void HLexer::process_number( Token& token )
 {
+    while(!c_eoi() && digit(c_) ){
+        token.text.push_back(c_);
+        c_next();
+        token.name = LNG::TN::t_integer_l;
+        if(c_peek() == '.'){
+
+        }
+    }
     // NOTE: Add your code here (instead of the provided c_next()).
-    c_next();
+   c_next();
     //   Provided file test/test4.pas could help with the testing.
 }
 
@@ -129,7 +138,16 @@ void HLexer::get( Token& token )
             break;
         case '*': set(token, LNG::TN::t_multiply);
             break;
-        case '.': set(token, LNG::TN::t_dot);
+        case '.':
+            if (is_.peek() == '.') {
+                token.text = '.';
+                token.text.push_back(c_peek());
+                token.name = LNG::TN::t_subrange;
+                c_next();
+                c_next();
+            } else {
+                set( token, LNG::TN::t_dot );
+            }
             break;
         case ',': set(token, LNG::TN::t_comma);
             break;
@@ -141,9 +159,14 @@ void HLexer::get( Token& token )
             break;
         case ')': set(token, LNG::TN::t_rparenthesis);
             break;
+        case '^': set(token, LNG::TN::t_caret);
+            break;
+        case '=': set( token, LNG::TN::t_eq );
+            break;
         case ':':
             if (is_.peek() == '=') {
-                token.text = ':=';
+                token.text = ':';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_assign;
                 c_next();
                 c_next();
@@ -151,17 +174,17 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_colon );
             }
             break;
-        case '=': set( token, LNG::TN::t_eq );
-            break;
         case '<':
             if (is_.peek() == '=') {
-                token.text = '<=';
+                token.text = '<';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_lteq;
                 c_next();
                 c_next();
             }
             else if (is_.peek() == '>'){
-                token.text = '<>';
+                token.text = '<';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_neq;
                 c_next();
                 c_next();
@@ -171,7 +194,8 @@ void HLexer::get( Token& token )
             break;
         case '>':
             if (is_.peek() == '=') {
-                token.text = '>=';
+                token.text = '>';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_gteq;
                 c_next();
                 c_next();
