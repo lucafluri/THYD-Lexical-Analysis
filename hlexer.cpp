@@ -28,9 +28,6 @@ bool HLexer::remove_comment( Token& token )
         c_next();
     }
 
-    /*if(c_ == '\n'){
-        c_next();
-    }*/
     return true;
 }
 
@@ -60,27 +57,29 @@ void HLexer::process_string( Token& token )
 
 
 // Process identifier names.
-void HLexer::process_identifier( Token& token )
-{
+void HLexer::process_identifier( Token& token ) {
     bool has_ended = false;
 
-    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';'  && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != '\n') {
+    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' &&
+            c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
         token.text.push_back(c_);
+        std::cout << "first one:" + token.text << std::endl;
         c_next();
-        /*if (c_ == '{' || c_ == '(' || c_ == '[' || c_ == ',' || c_ == ':'
-            || c_ == ';' || c_ == ')' || c_ == '}' || c_ == ' '){
-            has_ended = true;
+        /*if(c_peek() == '\n') {
+            c_next();
+            token.text.push_back(c_);
+            std::cout << "here I am:" + token.text << std::endl;
             break;
-        }*/
+        };*/
     }
 
     /*if (!has_ended) {
         throw LexerException( token.loc, "Unexpected end of identifier" );
     }*/
+
     token.text.push_back(c_);
     token.name = LNG::TN::t_identifier;
     c_next();
-
 }
 
 
@@ -152,184 +151,7 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_gt );
             }
             break;
-        /*case 'i':
-            if (is_.peek() == 'f') {
-                token.text = "if";
-                token.name = LNG::TN::t_if;
-                c_next();
-                c_next();
-            }
-            else if(is_.peek() == 'n') {
-                std::string prog = "integer";
-                int i = 1;
-                token.text = "i";
-                while (is_.peek() == prog.at(i)) {
-                    token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if (token.text == "integer") {
-                    token.name = LNG::TN::t_integer;
-                    c_next();
-                    c_next();
-                } else {
-                    token.text = 'i';
-                    process_identifier(token);
-                }
-            }else {
-                process_identifier(token);
-            }
-            break;
-        case 'I':
-            if(is_.peek() == 'n') {
-                std::string prog = "Integer";
-                int i = 1;
-                token.text = "I";
-                while (is_.peek() == prog.at(i)) {
-                    token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if (token.text == "Integer") {
-                    token.name = LNG::TN::t_integer;
-                    c_next();
-                    c_next();
-                } else {
-                   token.text = 'I';
-                   process_identifier(token);
-                }
-            }else {
-                process_identifier(token);
-            }
-            break;
-        case 'b':
-            if(is_.peek() == 'e'){
-                std::string prog = "begin";
-                int i = 1;
-                token.text = "b";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "begin"){
-                    token.name = LNG::TN::t_begin;
-                    c_next();
-                    c_next();
-                } else{
-                    token.text = 'b';
-                    process_identifier(token);
-                }
-            } else {
-                process_identifier(token);
-            }
-            break;
-        case 'p':
-            if(is_.peek() == 'r'){
-                std::string prog = "program";
-                int i = 1;
-                token.text = "p";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "program"){
-                    token.name = LNG::TN::t_program;
-                    c_next();
-                    c_next();
-                } else{
-                    token.text = 'p';
-                    process_identifier(token);
-                }
-            } else {
-                process_identifier(token);
-            }
-            break;
-        case 'v':
-            if(is_.peek() == 'a'){
-                std::string prog = "var";
-                int i = 1;
-                token.text = "v";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "var"){
-                    token.name = LNG::TN::t_var;
-                    c_next();
-                    c_next();
-                } else{
-                    token.text = 'v';
-                    process_identifier(token);
-                }
-            } else {
-               process_identifier(token);
-            }
-            break;
-        case 'e':
-            if(is_.peek() == 'n'){
-                std::string prog = "end";
-                int i = 1;
-                token.text = "e";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "end"){
-                    token.name = LNG::TN::t_end;
-                    c_next();
-                    c_next();
-                } else{
-                    token.text = 'e';
-                    process_identifier(token);
-                }
-            }
-            else if(is_.peek() == 'l') {
-                std::string prog = "else";
-                int i = 1;
-                token.text = "e";
-                while (is_.peek() == prog.at(i)) {
-                    token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1) {
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if (token.text == "else") {
-                    token.name = LNG::TN::t_else;
-                    c_next();
-                    c_next();
-                } else {
-                    token.text = 'e';
-                    process_identifier(token);
-                }
-                } else {
-                    process_identifier(token);
-                }
-            break;
-*/
+
          // NOTE: Add code here for all the remaining cases.
 
         default:
