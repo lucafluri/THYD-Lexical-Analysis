@@ -12,15 +12,25 @@ bool HLexer::remove_whitespaces()
 
 bool HLexer::remove_comment( Token& token )
 {
+    bool has_ended = false;
+
     if (c_ == '{') {
-        while(c_ != '}'){
+        while(c_ != '}' && !c_eoi()){
             c_next();
         }
         c_next();
     }
-    if(c_ == '\n'){
+    else if(c_ == '(' && c_peek() == '*')
+    {
+        while (c_ != ')' && !c_eoi()){
+            c_next();
+        }
         c_next();
     }
+
+    /*if(c_ == '\n'){
+        c_next();
+    }*/
     return true;
 }
 
@@ -52,26 +62,23 @@ void HLexer::process_string( Token& token )
 // Process identifier names.
 void HLexer::process_identifier( Token& token )
 {
-    // NOTE: Add your code here (instead of the provided c_next()).
-
     bool has_ended = false;
 
-    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_))) {
+    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';'  && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != '\n') {
         token.text.push_back(c_);
         c_next();
-        if (c_ == '\n') {
+        /*if (c_ == '{' || c_ == '(' || c_ == '[' || c_ == ',' || c_ == ':'
+            || c_ == ';' || c_ == ')' || c_ == '}' || c_ == ' '){
             has_ended = true;
             break;
-        }
+        }*/
     }
 
-   /* if (!has_ended) {
-        throw LexerException( token.loc, "Unexpected end of string" );
+    /*if (!has_ended) {
+        throw LexerException( token.loc, "Unexpected end of identifier" );
     }*/
     token.text.push_back(c_);
     token.name = LNG::TN::t_identifier;
-
-    //end of custom code
     c_next();
 
 }
@@ -102,7 +109,8 @@ void HLexer::get( Token& token )
 
     // NOTE: Add code to remove comments and white-spaces.
     while (remove_whitespaces());
-    (remove_comment(token));
+    remove_comment(token);
+
 
     // Return EOI if at end of input
     if ( c_eoi() ) {
@@ -117,6 +125,12 @@ void HLexer::get( Token& token )
         case '=': set( token, LNG::TN::t_eq );
             break;
         case '.': set(token, LNG::TN::t_dot);
+            break;
+        case ',': set(token, LNG::TN::t_comma);
+            break;
+        case '(': set(token, LNG::TN::t_lparenthesis);
+            break;
+        case ')': set(token, LNG::TN::t_rparenthesis);
             break;
         case ':':
             if (is_.peek() == '=') {
@@ -138,7 +152,7 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_gt );
             }
             break;
-        case 'i':
+        /*case 'i':
             if (is_.peek() == 'f') {
                 token.text = "if";
                 token.name = LNG::TN::t_if;
@@ -151,7 +165,7 @@ void HLexer::get( Token& token )
                 token.text = "i";
                 while (is_.peek() == prog.at(i)) {
                     token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1) {
+                    if (i >= prog.size() - 1){
                         break;
                     }
                     i++;
@@ -162,11 +176,36 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else {
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'i';
+                    process_identifier(token);
                 }
             }else {
-                set(token, LNG::TN::t_unknown);
+                process_identifier(token);
+            }
+            break;
+        case 'I':
+            if(is_.peek() == 'n') {
+                std::string prog = "Integer";
+                int i = 1;
+                token.text = "I";
+                while (is_.peek() == prog.at(i)) {
+                    token.text = token.text + prog.at(i);
+                    if (i >= prog.size() - 1){
+                        break;
+                    }
+                    i++;
+                    c_next();
+                }
+                if (token.text == "Integer") {
+                    token.name = LNG::TN::t_integer;
+                    c_next();
+                    c_next();
+                } else {
+                   token.text = 'I';
+                   process_identifier(token);
+                }
+            }else {
+                process_identifier(token);
             }
             break;
         case 'b':
@@ -187,11 +226,11 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'b';
+                    process_identifier(token);
                 }
             } else {
-                set(token, LNG::TN::t_unknown);
+                process_identifier(token);
             }
             break;
         case 'p':
@@ -212,11 +251,11 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'p';
+                    process_identifier(token);
                 }
             } else {
-                set(token, LNG::TN::t_unknown);
+                process_identifier(token);
             }
             break;
         case 'v':
@@ -237,11 +276,11 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'v';
+                    process_identifier(token);
                 }
             } else {
-                set(token, LNG::TN::t_unknown);
+               process_identifier(token);
             }
             break;
         case 'e':
@@ -262,8 +301,8 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'e';
+                    process_identifier(token);
                 }
             }
             else if(is_.peek() == 'l') {
@@ -283,14 +322,14 @@ void HLexer::get( Token& token )
                     c_next();
                     c_next();
                 } else {
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
+                    token.text = 'e';
+                    process_identifier(token);
                 }
                 } else {
-                    set(token, LNG::TN::t_unknown);
+                    process_identifier(token);
                 }
             break;
-
+*/
          // NOTE: Add code here for all the remaining cases.
 
         default:
