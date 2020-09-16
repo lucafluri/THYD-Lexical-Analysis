@@ -58,20 +58,23 @@ void HLexer::process_string( Token& token )
 
 // Process identifier names.
 void HLexer::process_identifier( Token& token ) {
+
     bool has_ended = false;
 
     while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' && c_peek() != '{' && c_peek() != '}' && c_peek() != '[' && c_peek() != ']'
-           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
+           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '+' && c_peek() != '-' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
         token.text.push_back(c_);
         c_next();
+        has_ended = true;
         }
-
-    /*if (!has_ended) {
-        throw LexerException( token.loc, "Unexpected end of identifier" );
-    }*/
 
     if(c_peek() != '\n'){
         token.text.push_back(c_);
+        has_ended = true;
+    }
+
+    if (!has_ended) {
+        throw LexerException( token.loc, "Unexpected end of identifier" );
     }
 
     token.name = LNG::TN::t_identifier;
@@ -118,11 +121,21 @@ void HLexer::get( Token& token )
     switch ( c_ ) {
         case ';': set( token, LNG::TN::t_semicolon );
             break;
-        case '=': set( token, LNG::TN::t_eq );
+        case '+': set(token, LNG::TN::t_plus);
+            break;
+        case '/': set(token, LNG::TN::t_divide);
+            break;
+        case '-': set(token, LNG::TN::t_minus);
+            break;
+        case '*': set(token, LNG::TN::t_multiply);
             break;
         case '.': set(token, LNG::TN::t_dot);
             break;
         case ',': set(token, LNG::TN::t_comma);
+            break;
+        case '[': set(token, LNG::TN::t_lbracket);
+            break;
+        case ']': set(token, LNG::TN::t_rbracket);
             break;
         case '(': set(token, LNG::TN::t_lparenthesis);
             break;
@@ -138,6 +151,24 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_colon );
             }
             break;
+        case '=': set( token, LNG::TN::t_eq );
+            break;
+        case '<':
+            if (is_.peek() == '=') {
+                token.text = '<=';
+                token.name = LNG::TN::t_lteq;
+                c_next();
+                c_next();
+            }
+            else if (is_.peek() == '>'){
+                token.text = '<>';
+                token.name = LNG::TN::t_neq;
+                c_next();
+                c_next();
+            } else {
+                set( token, LNG::TN::t_lt );
+            }
+            break;
         case '>':
             if (is_.peek() == '=') {
                 token.text = '>=';
@@ -148,6 +179,7 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_gt );
             }
             break;
+
 
          // NOTE: Add code here for all the remaining cases.
 
