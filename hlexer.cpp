@@ -60,25 +60,22 @@ void HLexer::process_string( Token& token )
 void HLexer::process_identifier( Token& token ) {
     bool has_ended = false;
 
-    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' &&
-            c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
+    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' && c_peek() != '{' && c_peek() != '}' && c_peek() != '[' && c_peek() != ']'
+           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
         token.text.push_back(c_);
-        std::cout << "first one:" + token.text << std::endl;
         c_next();
-        /*if(c_peek() == '\n') {
-            c_next();
-            token.text.push_back(c_);
-            std::cout << "here I am:" + token.text << std::endl;
-            break;
-        };*/
-    }
+        }
 
     /*if (!has_ended) {
         throw LexerException( token.loc, "Unexpected end of identifier" );
     }*/
 
-    token.text.push_back(c_);
+    if(c_peek() != '\n'){
+        token.text.push_back(c_);
+    }
+
     token.name = LNG::TN::t_identifier;
+
     c_next();
 }
 
