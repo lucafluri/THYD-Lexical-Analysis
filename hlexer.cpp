@@ -12,15 +12,22 @@ bool HLexer::remove_whitespaces()
 
 bool HLexer::remove_comment( Token& token )
 {
+    bool has_ended = false;
+
     if (c_ == '{') {
-        while(c_ != '}'){
+        while(c_ != '}' && !c_eoi()){
             c_next();
         }
         c_next();
     }
-    if(c_ == '\n'){
+    else if(c_ == '(' && c_peek() == '*')
+    {
+        while (c_ != ')' && !c_eoi()){
+            c_next();
+        }
         c_next();
     }
+
     return true;
 }
 
@@ -50,36 +57,37 @@ void HLexer::process_string( Token& token )
 
 
 // Process identifier names.
-void HLexer::process_identifier( Token& token )
-{
-    // NOTE: Add your code here (instead of the provided c_next()).
+void HLexer::process_identifier( Token& token ) {
 
     bool has_ended = false;
 
-    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_))) {
+    while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' && c_peek() != '{' && c_peek() != '}' && c_peek() != '[' && c_peek() != ']'
+           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '+' && c_peek() != '-' && c_peek() != '*' && c_peek() != '<' && c_peek() != '>' && c_peek() != '^'
+           && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
         token.text.push_back(c_);
         c_next();
-        if (c_ == '\n') {
-            has_ended = true;
-            break;
+        has_ended = true;
         }
+
+    if(c_peek() != '\n'){
+        token.text.push_back(c_);
+        has_ended = true;
     }
 
-   /* if (!has_ended) {
-        throw LexerException( token.loc, "Unexpected end of string" );
-    }*/
-    token.text.push_back(c_);
+    if (!has_ended) {
+        throw LexerException( token.loc, "Unexpected end of identifier" );
+    }
+
     token.name = LNG::TN::t_identifier;
 
-    //end of custom code
     c_next();
-
 }
 
 
 // A sequence of numbers/digits e.g. 12345
 void HLexer::process_digits( Token& token )
 {
+
     // NOTE: Add your code here (instead of the provided c_next()).
     c_next();
 }
@@ -88,8 +96,37 @@ void HLexer::process_digits( Token& token )
 // Process integers and real numbers.
 void HLexer::process_number( Token& token )
 {
-    // NOTE: Add your code here (instead of the provided c_next()).
-    c_next();
+    while(!c_eoi() && digit(c_)){
+        token.text.push_back(c_);
+        token.name = LNG::TN::t_integer_l;
+        c_next();
+        if((c_ == '.' || c_ == 'E') && c_peek() != '.'){
+            token.text.push_back(c_);
+        }
+        if((c_ == '.' && c_peek() == '.') || c_ == ')' || c_ == ';'){
+            break;
+        }
+        if(c_ == '.' || c_ == 'E')
+        {
+            if((c_ == '.' && c_peek() == 'E' && c_peek() != '.') || c_peek() == ' ' ){
+                c_next();
+                token.name = LNG::TN::t_unknown;
+                break;
+            }
+            if(c_ == 'E' && c_peek() == '.')
+            {
+                c_next();
+                token.name = LNG::TN::t_unknown;
+                break;
+            }
+            token.name = LNG::TN::t_real_l;
+            c_next();
+            while (digit(c_) || c_ == '-' || c_ == 'E'){
+                token.text.push_back(c_);
+                c_next();
+            }
+        }
+    }
     //   Provided file test/test4.pas could help with the testing.
 }
 
@@ -102,7 +139,8 @@ void HLexer::get( Token& token )
 
     // NOTE: Add code to remove comments and white-spaces.
     while (remove_whitespaces());
-    (remove_comment(token));
+    remove_comment(token);
+
 
     // Return EOI if at end of input
     if ( c_eoi() ) {
@@ -114,13 +152,43 @@ void HLexer::get( Token& token )
     switch ( c_ ) {
         case ';': set( token, LNG::TN::t_semicolon );
             break;
-        case '=': set( token, LNG::TN::t_eq );
+        case '+': set(token, LNG::TN::t_plus);
             break;
-        case '.': set(token, LNG::TN::t_dot);
+        case '/': set(token, LNG::TN::t_divide);
+            break;
+        case '-': set(token, LNG::TN::t_minus);
+            break;
+        case '*': set(token, LNG::TN::t_multiply);
+            break;
+        case '.':
+            if (is_.peek() == '.') {
+                token.text = '.';
+                token.text.push_back(c_peek());
+                token.name = LNG::TN::t_subrange;
+                c_next();
+                c_next();
+            } else {
+                set( token, LNG::TN::t_dot );
+            }
+            break;
+        case ',': set(token, LNG::TN::t_comma);
+            break;
+        case '[': set(token, LNG::TN::t_lbracket);
+            break;
+        case ']': set(token, LNG::TN::t_rbracket);
+            break;
+        case '(': set(token, LNG::TN::t_lparenthesis);
+            break;
+        case ')': set(token, LNG::TN::t_rparenthesis);
+            break;
+        case '^': set(token, LNG::TN::t_caret);
+            break;
+        case '=': set( token, LNG::TN::t_eq );
             break;
         case ':':
             if (is_.peek() == '=') {
-                token.text = ':=';
+                token.text = ':';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_assign;
                 c_next();
                 c_next();
@@ -128,9 +196,28 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_colon );
             }
             break;
+        case '<':
+            if (is_.peek() == '=') {
+                token.text = '<';
+                token.text.push_back(c_peek());
+                token.name = LNG::TN::t_lteq;
+                c_next();
+                c_next();
+            }
+            else if (is_.peek() == '>'){
+                token.text = '<';
+                token.text.push_back(c_peek());
+                token.name = LNG::TN::t_neq;
+                c_next();
+                c_next();
+            } else {
+                set( token, LNG::TN::t_lt );
+            }
+            break;
         case '>':
             if (is_.peek() == '=') {
-                token.text = '>=';
+                token.text = '>';
+                token.text.push_back(c_peek());
                 token.name = LNG::TN::t_gteq;
                 c_next();
                 c_next();
@@ -138,158 +225,7 @@ void HLexer::get( Token& token )
                 set( token, LNG::TN::t_gt );
             }
             break;
-        case 'i':
-            if (is_.peek() == 'f') {
-                token.text = "if";
-                token.name = LNG::TN::t_if;
-                c_next();
-                c_next();
-            }
-            else if(is_.peek() == 'n') {
-                std::string prog = "integer";
-                int i = 1;
-                token.text = "i";
-                while (is_.peek() == prog.at(i)) {
-                    token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1) {
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if (token.text == "integer") {
-                    token.name = LNG::TN::t_integer;
-                    c_next();
-                    c_next();
-                } else {
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-            }else {
-                set(token, LNG::TN::t_unknown);
-            }
-            break;
-        case 'b':
-            if(is_.peek() == 'e'){
-                std::string prog = "begin";
-                int i = 1;
-                token.text = "b";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "begin"){
-                    token.name = LNG::TN::t_begin;
-                    c_next();
-                    c_next();
-                } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-            } else {
-                set(token, LNG::TN::t_unknown);
-            }
-            break;
-        case 'p':
-            if(is_.peek() == 'r'){
-                std::string prog = "program";
-                int i = 1;
-                token.text = "p";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "program"){
-                    token.name = LNG::TN::t_program;
-                    c_next();
-                    c_next();
-                } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-            } else {
-                set(token, LNG::TN::t_unknown);
-            }
-            break;
-        case 'v':
-            if(is_.peek() == 'a'){
-                std::string prog = "var";
-                int i = 1;
-                token.text = "v";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "var"){
-                    token.name = LNG::TN::t_var;
-                    c_next();
-                    c_next();
-                } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-            } else {
-                set(token, LNG::TN::t_unknown);
-            }
-            break;
-        case 'e':
-            if(is_.peek() == 'n'){
-                std::string prog = "end";
-                int i = 1;
-                token.text = "e";
-                while (is_.peek() == prog.at(i)){
-                    token.text = token.text + prog.at(i);
-                    if(i >= prog.size()-1){
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if(token.text == "end"){
-                    token.name = LNG::TN::t_end;
-                    c_next();
-                    c_next();
-                } else{
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-            }
-            else if(is_.peek() == 'l') {
-                std::string prog = "else";
-                int i = 1;
-                token.text = "e";
-                while (is_.peek() == prog.at(i)) {
-                    token.text = token.text + prog.at(i);
-                    if (i >= prog.size() - 1) {
-                        break;
-                    }
-                    i++;
-                    c_next();
-                }
-                if (token.text == "else") {
-                    token.name = LNG::TN::t_else;
-                    c_next();
-                    c_next();
-                } else {
-                    token.name = LNG::TN::t_identifier;
-                    c_next();
-                }
-                } else {
-                    set(token, LNG::TN::t_unknown);
-                }
-            break;
+
 
          // NOTE: Add code here for all the remaining cases.
 
