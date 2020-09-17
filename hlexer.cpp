@@ -62,7 +62,8 @@ void HLexer::process_identifier( Token& token ) {
     bool has_ended = false;
 
     while (!c_eoi() && (isalpha(c_) || c_ == '_' || digit(c_)) && c_peek() != ',' && c_peek() != ';' && c_peek() != '{' && c_peek() != '}' && c_peek() != '[' && c_peek() != ']'
-           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '+' && c_peek() != '-' && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
+           && c_peek() != ':' && c_peek() != '.' && c_peek() != '=' && c_peek() != '+' && c_peek() != '-' && c_peek() != '*' && c_peek() != '<' && c_peek() != '>' && c_peek() != '^'
+           && c_peek() != '(' && c_peek() != ')' && c_peek() != ' ') {
         token.text.push_back(c_);
         c_next();
         has_ended = true;
@@ -95,16 +96,37 @@ void HLexer::process_digits( Token& token )
 // Process integers and real numbers.
 void HLexer::process_number( Token& token )
 {
-    while(!c_eoi() && digit(c_) ){
+    while(!c_eoi() && digit(c_)){
         token.text.push_back(c_);
-        c_next();
         token.name = LNG::TN::t_integer_l;
-        if(c_peek() == '.'){
-
+        c_next();
+        if((c_ == '.' || c_ == 'E') && c_peek() != '.'){
+            token.text.push_back(c_);
+        }
+        if((c_ == '.' && c_peek() == '.') || c_ == ')' || c_ == ';'){
+            break;
+        }
+        if(c_ == '.' || c_ == 'E')
+        {
+            if((c_ == '.' && c_peek() == 'E' && c_peek() != '.') || c_peek() == ' ' ){
+                c_next();
+                token.name = LNG::TN::t_unknown;
+                break;
+            }
+            if(c_ == 'E' && c_peek() == '.')
+            {
+                c_next();
+                token.name = LNG::TN::t_unknown;
+                break;
+            }
+            token.name = LNG::TN::t_real_l;
+            c_next();
+            while (digit(c_) || c_ == '-' || c_ == 'E'){
+                token.text.push_back(c_);
+                c_next();
+            }
         }
     }
-    // NOTE: Add your code here (instead of the provided c_next()).
-   c_next();
     //   Provided file test/test4.pas could help with the testing.
 }
 
