@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/common.h
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/common.h
 string
 -
 algorithm
@@ -14,31 +14,33 @@ algorithm
 exception
 -
 
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/hlexer.cpp
-hlexer.h
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/hlexer.h
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/flexer.cpp
+inttypes.h
+-
+iostream
+-
+errno.h
+-
+cstdlib
+-
+cstdio
+-
+cstring
+-
+FlexLexer.h
+-
+common.h
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/common.h
+language.h
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/language.h
+unistd.h
+-
 
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/hlexer.h
-lexer.h
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/lexer.h
-
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/language.h
+/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/language.h
 set
 -
 string
 -
 map
 -
-
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/lexer.h
-cassert
--
-iostream
--
-string
--
-common.h
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/common.h
-language.h
-/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/language.h
 

@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis
+# Install script for directory: /mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/Users/Maciuska/Documents/GitHub/THYD-Lexical-Analysis/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/Luca Fluri/Google Drive/FHNW iCompetence BSc/Semester 5 - HS20 Reykjavik/Compilers/Project/Project01/TPLexer/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
